@@ -1,15 +1,3 @@
-"""
-Reads benchmark_results.csv and produces the descriptive statistics and
-visualisations Gerhard asked for (deliverable #4).
-
-WHAT'S PLOTTED: Tsetup / Tprove / Tverify vs. batch size N, for the Groth16
-batch-nullifier circuit. This is the pipeline-validation benchmark, not the
-Nova-vs-PLONK comparison - see design_rationale.md for the full scoping note.
-
-Run with: python3 analysis.py
-Requires: pandas, matplotlib (both already available in this environment)
-"""
-
 import pandas as pd
 import matplotlib.pyplot as plt
 

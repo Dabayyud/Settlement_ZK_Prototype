@@ -145,8 +145,9 @@ mod tests {
         assert!(cs.is_satisfied().unwrap());
     }
  
-    #[test]
-    fn one_wrong_secret_in_the_batch_fails_the_whole_proof() {
+   #[test]
+    
+    fn one_wrong_secret_in_the_batch_fails_the_whole_proof() -> Result<(), SynthesisError> {
 
         let params = poseidon_test_params::<F>();
         let secrets: Vec<F> = (0..4u64).map(F::from).collect(); // Iterator declares function and .collect() executes.
@@ -164,6 +165,19 @@ mod tests {
             nullifiers,
         };
         circuit.generate_constraints(cs.clone()).unwrap();
-        assert!(!cs.is_satisfied().unwrap());
+        assert!(!cs.is_satisfied()?, "");
+        if let Some(unsatisfied_path) = cs.which_is_unsatisfied()? {
+                println!("Test passed and found the expected failure at: {}", unsatisfied_path);
+        } else {
+                panic!(".")
+        }
+        // used: cargo test one_wrong_secret_in_the_batch_fails_the_whole_proof -- --nocapture
+        // to determine which constraint failed. 
+        // Found Faliure at constraint: R1CS - 782 which makes perfect sense since each
+        // 'trade' adds 261 constraints and we purposely altered the trade at the third 
+        // index. Therefore the it should fail between ranges (562-783).
+        // Second last constraint failed at the 'enforce_equal' stage (!= 0) .
+
+        Ok(())
     }
 }
